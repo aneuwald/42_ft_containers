@@ -6,7 +6,7 @@
 #    By: acanterg <acanterg@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/07 17:18:31 by acanterg          #+#    #+#              #
-#    Updated: 2022/03/18 17:03:52 by acanterg         ###   ########.fr        #
+#    Updated: 2022/03/20 18:30:16 by acanterg         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ NAME 	=	containers
 CC		=	clang++
 FLAGS	=	-Wall -Wextra -Werror -std=c++98
 FSANIT	=	-fsanitize=address
-INCLUD	=	-I .
+INCLUD	=	-I headers
 DIR_OBJ	=	obj
 OBJ		= 	$(SRC:%.cpp=$(DIR_OBJ)/%.o)
 
@@ -28,7 +28,7 @@ $(DIR_OBJ)/%.o:%.cpp
 
 $(NAME):	$(OBJ)
 			printf "Compiling $(NAME) ... "
-			$(CC) $(FLAGS) $(FSANIT) $(SRC) -o $(NAME)
+			$(CC) $(FLAGS) $(FSANIT) $(SRC) $(INCLUD) -o $(NAME)
 			printf "$(C_GREEN)DONE$(C_END)\n"
 
 
