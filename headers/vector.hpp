@@ -10,18 +10,22 @@ namespace ft
 	template <typename T, typename Alloc = std::allocator<T> >
 	class vector
 	{
-		typedef T					value_type;
-		typedef std::allocator<T>	allocator_type;
-		typedef std::size_t 		size_type;
-		typedef value_type			*pointer;
-		typedef value_type			&reference;
+		typedef Alloc allocator_type;
+		typedef typename allocator_type::value_type value_type;
+		typedef typename allocator_type::pointer pointer;
+		typedef typename allocator_type::const_pointer const_pointer;
+		typedef typename allocator_type::reference reference;
+		typedef typename allocator_type::const_reference const_reference;
+		typedef typename allocator_type::size_type size_type;
+		typedef typename allocator_type::difference_type difference_type;
+
+		typedef typename std::iterator<std::random_access_iterator_tag, T> iterator;
 
 	private:
-
-		allocator_type	_allocator;
-		pointer			_start;
-		size_type		_size;
-		size_type		_capacity;
+		allocator_type _allocator;
+		pointer _start;
+		size_type _size;
+		size_type _capacity;
 
 		void reallocate_capacity()
 		{
@@ -35,8 +39,7 @@ namespace ft
 
 	public:
 
-		explicit
-		vector(const allocator_type &alloc = allocator_type())
+		explicit vector(const allocator_type &alloc = allocator_type())
 		{
 			std::cout << "explicit () constructor" << std::endl;
 			_allocator = alloc;
@@ -45,8 +48,7 @@ namespace ft
 			_start = _allocator.allocate(_size);
 		}
 
-		explicit
-		vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type())
+		explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type())
 		{
 			std::cout << "explicit (n, val) constructor" << std::endl;
 			_size = n;
@@ -58,8 +60,8 @@ namespace ft
 		}
 
 		template <typename InputIterator
-			// , typename std::__is_integer<InputIterator>::__type _Integral
-		> 
+				  // , typename std::__is_integer<InputIterator>::__type _Integral
+				  >
 		vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type())
 		{
 			std::cout << "template (first, last) constructor" << std::endl;
@@ -72,8 +74,9 @@ namespace ft
 				_allocator.construct(_start + index, *(first + index));
 		}
 
-		vector (const vector& vector) {
-			(void) vector;
+		vector(const vector &vector)
+		{
+			(void)vector;
 		}
 
 		~vector()
@@ -82,25 +85,25 @@ namespace ft
 			_allocator.deallocate(_start, _size);
 		}
 
-		reference operator[] (size_type index) { return (_start[index]); }
+		reference operator[](size_type index) { return (_start[index]); }
 
 		allocator_type get_allocator() const { return (allocator_type()); }
 
-		reference front() { return (*_start);}
-		reference front() const { return (*_start);}
+		reference front() { return (*_start); }
+		reference front() const { return (*_start); }
 
-		reference back() { return (*(_start + _size - 1));}
-		reference back() const { return (*(_start + _size - 1));}
+		reference back() { return (*(_start + _size - 1)); }
+		reference back() const { return (*(_start + _size - 1)); }
 
 		reference at(size_type n) { return (*this)[n]; }
 		reference at(size_type n) const { return (*this)[n]; }
 
-		pointer data() { return &(front());}
-		pointer data() const { return &(front());}
+		pointer data() { return &(front()); }
+		pointer data() const { return &(front()); }
 
 		size_type capacity() const { return (_capacity); }
 		size_type size() const { return (_size); }
-		bool empty() const { return (!_size);}
+		bool empty() const { return (!_size); }
 
 		void clear()
 		{
@@ -109,14 +112,14 @@ namespace ft
 			_size = 0;
 		}
 
-		void push_back (value_type el)
+		void push_back(value_type el)
 		{
 			if (_size == _capacity)
 				reallocate_capacity();
 			(*this)[_size++] = el;
 		}
 
-		void pop_back ()
+		void pop_back()
 		{
 			_size--;
 			_allocator.destroy(_start + _size);
@@ -124,6 +127,15 @@ namespace ft
 
 		size_type max_size() { return (PTRDIFF_MAX / sizeof(value_type)); };
 
+		pointer begin()
+		{
+			return (_start);
+		}
+
+		pointer end()
+		{
+			return (_start + _size);
+		}
 	};
 }
 
