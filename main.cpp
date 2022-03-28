@@ -89,7 +89,7 @@ int main()
 	myVector.push_back(42);		origVector.push_back(42);
 	myVector.push_back(240);	origVector.push_back(240);
 
-		std::cout << "\n** back() ** " << std::endl;
+	std::cout << "\n** back() ** " << std::endl;
 	printParams(MINE, myVector.back());
 	printParams(ORIG, origVector.back());
 
