@@ -1,19 +1,28 @@
+#include <iomanip>
 #include <iostream>
 #include <vector>
 #include "vector.hpp"
 
-enum t_mine {
-	MINE,
-	ORIG  //original
-};
+int indexPrint = 0;
 
-template <typename T>
-void printParams(t_mine which, T msg) {
+template <typename T, typename U>
+void printParams(std::string msg, T mine, U orig) {
 
-	std::cout << (which == MINE ? "\e[1;32mMine:" : "\e[1;35mOrig:") << "\t\e[0m";
-	
-	std::cout << msg << std::endl;
+	std::cout << "\n" << msg << ":\t";
+	std::cout << "\e[1;32m" << mine << "\e[0m |";
+	std::cout << "\e[1;35m" << orig << "\e[0m";
+	std::cout << std::endl;
 }
+
+template <typename T, typename U>
+void printParamsIterator(T mine, U orig) {
+
+	std::cout << '[' << indexPrint++ << "]:\t";
+	std::cout << "\e[1;32m" << mine << "\e[0m |";
+	std::cout << "\e[1;35m" << orig << "\e[0m";
+	std::cout << std::endl;
+}
+
 
 
 int main()
@@ -22,9 +31,7 @@ int main()
 	ft::vector<int> myVector(5u, 100);
 	std::vector<int> origVector(5, 100);
 
-	std::cout << "\n** position[1] ** " << std::endl;
-	printParams(MINE, myVector[1]);
-	printParams(ORIG, origVector[1]);
+	printParams("position[1]", myVector[1], origVector[1]);
 
 	std::cout << "\n** populating ** " << std::endl;
 	std::cout << "[2] = 2121" << std::endl;
@@ -32,56 +39,50 @@ int main()
 	myVector[2] = 2121;	origVector[2] = 2121;
 	myVector[3] = 21;	origVector[3] = 21;;
 
-	std::cout << "\n** position[3] ** " << std::endl;
-	printParams(MINE, myVector[3]);
-	printParams(ORIG, origVector[3]);
+	std::cout << "\niterators!!" << std::endl;
+	{
+		ft::vector<int>::iterator itMine = myVector.begin();
+		std::vector<int>::iterator itOrig = origVector.begin();
+		indexPrint = 0;
+		while (itMine != myVector.end() && itOrig != origVector.end())
+			printParamsIterator(*(itMine++), *(itOrig++));
+	}
+
+	std::cout << "\nreverse iterators!!" << std::endl;
+	{
+		ft::vector<int>::reverse_iterator itMine = myVector.rbegin();
+		std::vector<int>::reverse_iterator itOrig = origVector.rbegin();
+		indexPrint = 0;
+		while (itMine != myVector.rend() && itOrig != origVector.rend())
+			printParamsIterator(*(itMine++), *(itOrig++));
+	}
+
+	printParams("position[3]", myVector[3], origVector[3]);
 	
-	std::cout << "\n** front() ** " << std::endl;
-	printParams(MINE, myVector.front());
-	printParams(ORIG, origVector.front());
+	printParams(".front()", myVector.front(), origVector.front());
 
-	std::cout << "\n** back() ** " << std::endl;
-	printParams(MINE, myVector.back());
-	printParams(ORIG, origVector.back());
+	printParams(".back()", myVector.back(), origVector.back());
 
-	std::cout << "\n** at(2) ** " << std::endl;
-	printParams(MINE, myVector.at(2));
-	printParams(ORIG, origVector.at(2));
+	printParams(".at(2)", myVector.at(2), origVector.at(2));
 
-	std::cout << "\n** size() ** " << std::endl;
-	printParams(MINE, myVector.size());
-	printParams(ORIG, origVector.size());
+	printParams(".size()", myVector.size(), origVector.size());
 
-	std::cout << "\n** data() ** " << std::endl;
-	printParams(MINE, myVector.data());
-	printParams(ORIG, origVector.data());
+	printParams(".data()", myVector.data(), origVector.data());
 
-	std::cout << "\n** *data() ** " << std::endl;
-	printParams(MINE, *myVector.data());
-	printParams(ORIG, *origVector.data());
+	printParams("*(.data())", *myVector.data(), *origVector.data());
 
-	std::cout << "\n** *(data + 2) ** " << std::endl;
-	printParams(MINE, *(myVector.data() + 2));
-	printParams(ORIG, *(origVector.data() + 2));
+	printParams("*(.data() + 2)", *(myVector.data() + 2), *(origVector.data() + 2));
 
-	std::cout << "\n** empty() ** " << std::endl;
-	printParams(MINE, (myVector.empty() ? "Empty!" : "Not empty!"));
-	printParams(ORIG, (origVector.empty() ? "Empty!" : "Not empty!"));
+	printParams(".empty()",  (myVector.empty() ? "Empty!" : "Not empty!"), (origVector.empty() ? "Empty!" : "Not empty!"));
 
-	std::cout << "\n** capacity() ** " << std::endl;
-	printParams(MINE, myVector.capacity());
-	printParams(ORIG, origVector.capacity());
-	
-	std::cout << "\n** back() ** " << std::endl;
-	printParams(MINE, myVector.back());
-	printParams(ORIG, origVector.back());
+	printParams(".capacity()", myVector.capacity(), origVector.capacity());
+
+	printParams(".back()", myVector.back(), origVector.back());
 
 	std::cout << "\npoping back..." << std::endl;
 	myVector.pop_back();	origVector.pop_back();
 
-	std::cout << "\n** back() ** " << std::endl;
-	printParams(MINE, myVector.back());
-	printParams(ORIG, origVector.back());
+	printParams(".back()", myVector.back(), origVector.back());
 
 	std::cout << "\npushing back..." << std::endl;
 	std::cout << "push_back(42)" << std::endl;
@@ -89,31 +90,59 @@ int main()
 	myVector.push_back(42);		origVector.push_back(42);
 	myVector.push_back(240);	origVector.push_back(240);
 
-	std::cout << "\n** back() ** " << std::endl;
-	printParams(MINE, myVector.back());
-	printParams(ORIG, origVector.back());
+	std::cout << "\niterators!!" << std::endl;
+	{
+		indexPrint = 0;
+		ft::vector<int>::iterator itMine = myVector.begin();
+		std::vector<int>::iterator itOrig = origVector.begin();
+		while (itMine != myVector.end() && itOrig != origVector.end())
+			printParamsIterator(*(itMine++), *(itOrig++));
+	}
 
-	std::cout << "\n** size() ** " << std::endl;
-	printParams(MINE, myVector.size());
-	printParams(ORIG, origVector.size());
+	std::cout << "\nreverse iterators!!" << std::endl;
+	{
+		indexPrint = 0;
+		ft::vector<int>::reverse_iterator itMine = myVector.rbegin();
+		std::vector<int>::reverse_iterator itOrig = origVector.rbegin();
+		while (itMine != myVector.rend() && itOrig != origVector.rend())
+			printParamsIterator(*(itMine++), *(itOrig++));
+	}
+
+	std::cout << "\n const iterators!!" << std::endl;
+	{
+		indexPrint = 0;
+		ft::vector<int>::const_iterator itMine = myVector.begin();
+		std::vector<int>::const_iterator itOrig = origVector.begin();
+		//*itMine = 10; -> can't be done!
+		while (itMine != myVector.end() && itOrig != origVector.end())
+			printParamsIterator(*(itMine++), *(itOrig++));
+	}
+
+	std::cout << "\nreverse const iterators!!" << std::endl;
+	{
+		indexPrint = 0;
+		ft::vector<int>::const_reverse_iterator itMine = myVector.rbegin();
+		std::vector<int>::const_reverse_iterator itOrig = origVector.rbegin();
+		//*itMine = 10; -> can't be done!
+		while (itMine != myVector.rend() && itOrig != origVector.rend())
+			printParamsIterator(*(itMine++), *(itOrig++));
+	}
+
+	printParams(".back()", myVector.back(), origVector.back());
+
+	printParams(".size()", myVector.size(), origVector.size());
 
 	std::cout << "\nclearing..." << std::endl;
 	myVector.clear();	origVector.clear();
 
-	std::cout << "\n** size() ** " << std::endl;
-	printParams(MINE, myVector.size());
-	printParams(ORIG, origVector.size());
+	printParams(".size()", myVector.size(), origVector.size());
 
-	std::cout << "\n** capacity() ** " << std::endl;
-	printParams(MINE, myVector.capacity());
-	printParams(ORIG, origVector.capacity());
+	printParams(".capacity()", myVector.capacity(), origVector.capacity());
 
-	std::cout << "\n** max_size() ** " << std::endl;
-	printParams(MINE, myVector.max_size());
-	printParams(ORIG, origVector.max_size());
-
+	printParams(".max_size()", myVector.max_size(), origVector.max_size());
 
 	std::cout << std::endl;
+
 }
 
 /** MAIN 42 **/

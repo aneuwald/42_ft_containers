@@ -6,7 +6,7 @@
 #    By: acanterg <acanterg@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/07 17:18:31 by acanterg          #+#    #+#              #
-#    Updated: 2022/03/20 18:30:16 by acanterg         ###   ########.fr        #
+#    Updated: 2022/03/29 11:47:51 by acanterg         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ NAME 	=	containers
 CC		=	clang++
 FLAGS	=	-Wall -Wextra -Werror -std=c++98
 FSANIT	=	-fsanitize=address
-INCLUD	=	-I headers
+INCLUD	=	-I headers/containers -I headers/utils
 DIR_OBJ	=	obj
 OBJ		= 	$(SRC:%.cpp=$(DIR_OBJ)/%.o)
 
