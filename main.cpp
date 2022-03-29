@@ -33,6 +33,8 @@ int main()
 	ft::vector<int> myVector(5u, 100);
 	std::vector<int> origVector(myVector.begin(), myVector.end());
 
+	origVector.reserve(42);
+
 	printParams("position[1]", myVector[1], origVector[1]);
 
 	std::cout << "\n** populating ** " << std::endl;

@@ -23,10 +23,10 @@ namespace ft
 		typedef typename allocator_type::size_type			size_type;
 		typedef typename allocator_type::difference_type	difference_type;
 
-		typedef normal_iterator<value_type>			iterator;
-		typedef normal_iterator<const value_type> 	const_iterator;
-     	typedef std::reverse_iterator<iterator>			reverse_iterator;
-		typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
+		typedef ft::normal_iterator<value_type>			iterator;
+		typedef ft::normal_iterator<const value_type> 	const_iterator;
+     	typedef ft::reverse_iterator<iterator>			reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 		explicit vector(const allocator_type &alloc = allocator_type())
 		{
@@ -82,7 +82,7 @@ namespace ft
 		reference front() const { return (*begin()); }
 
 		reference back() { return *(--end()); }
-		reference back() const { return *(end() - 1); }
+		reference back() const { return *(--end()); }
 
 		reference at(size_type n) { return (*this)[n]; }
 		reference at(size_type n) const { return (*this)[n]; }
@@ -125,6 +125,7 @@ namespace ft
 		const_iterator end() const { return const_iterator(_start + _size); }
 		const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
 		const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
+
 
 	private:
 		allocator_type _allocator;
