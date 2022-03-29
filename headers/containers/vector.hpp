@@ -23,8 +23,8 @@ namespace ft
 		typedef typename allocator_type::size_type			size_type;
 		typedef typename allocator_type::difference_type	difference_type;
 
-		typedef ft::normal_iterator<value_type>			iterator;
-		typedef ft::normal_iterator<const value_type> 	const_iterator;
+		typedef normal_iterator<value_type>			iterator;
+		typedef normal_iterator<const value_type> 	const_iterator;
      	typedef std::reverse_iterator<iterator>			reverse_iterator;
 		typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
 
@@ -74,15 +74,15 @@ namespace ft
 			_allocator.deallocate(_start, _size);
 		}
 
-		reference operator[](size_type index) { return (_start[index]); }
+		reference operator[](size_type index) { return _start[index]; }
 
-		allocator_type get_allocator() const { return (allocator_type()); }
+		allocator_type get_allocator() const { return allocator_type(); }
 
-		reference front() { return (*_start); }
-		reference front() const { return (*_start); }
+		reference front() { return (*begin()); }
+		reference front() const { return (*begin()); }
 
-		reference back() { return (*(_start + _size - 1)); }
-		reference back() const { return (*(_start + _size - 1)); }
+		reference back() { return *(--end()); }
+		reference back() const { return *(end() - 1); }
 
 		reference at(size_type n) { return (*this)[n]; }
 		reference at(size_type n) const { return (*this)[n]; }
@@ -92,7 +92,7 @@ namespace ft
 
 		size_type capacity() const { return (_capacity); }
 		size_type size() const { return (_size); }
-		bool empty() const { return (!_size); }
+		bool empty() const { return (begin() == end()); }
 
 		void clear()
 		{
@@ -118,13 +118,13 @@ namespace ft
 
 		iterator begin() { return iterator(_start); }
 		iterator end() { return iterator(_start + _size); }
-		reverse_iterator rbegin() { return reverse_iterator(_start + _size); }
-		reverse_iterator rend() { return reverse_iterator(_start); }
+		reverse_iterator rbegin() { return reverse_iterator(end()); }
+		reverse_iterator rend() { return reverse_iterator(begin()); }
 		
 		const_iterator begin() const { return const_iterator(_start); }
 		const_iterator end() const { return const_iterator(_start + _size); }
-		const_reverse_iterator rbegin() const { return const_reverse_iterator(_start + _size); }
-		const_reverse_iterator rend() const { return const_reverse_iterator(_start); }
+		const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
+		const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
 
 	private:
 		allocator_type _allocator;

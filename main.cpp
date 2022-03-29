@@ -8,8 +8,9 @@ int indexPrint = 0;
 template <typename T, typename U>
 void printParams(std::string msg, T mine, U orig) {
 
-	std::cout << "\n" << msg << ":\t";
-	std::cout << "\e[1;32m" << mine << "\e[0m |";
+	std::cout << (mine == orig ? "\e[0;32m[OK" : "\e[0;31m[NOK") << "]\e[0m ";
+	std::cout << msg << ":\t";
+	std::cout << "\e[1;32m" << mine << "\e[0m | ";
 	std::cout << "\e[1;35m" << orig << "\e[0m";
 	std::cout << std::endl;
 }
@@ -17,8 +18,9 @@ void printParams(std::string msg, T mine, U orig) {
 template <typename T, typename U>
 void printParamsIterator(T mine, U orig) {
 
+	std::cout << (mine == orig ? "\e[0;32m[OK" : "\e[0;31m[NOK") << "]\e[0m ";
 	std::cout << '[' << indexPrint++ << "]:\t";
-	std::cout << "\e[1;32m" << mine << "\e[0m |";
+	std::cout << "\e[1;32m" << mine << "\e[0m | ";
 	std::cout << "\e[1;35m" << orig << "\e[0m";
 	std::cout << std::endl;
 }
@@ -29,7 +31,7 @@ int main()
 {
 	std::cout << "\n===== CONSTRUCTORS =====" << std::endl;
 	ft::vector<int> myVector(5u, 100);
-	std::vector<int> origVector(5, 100);
+	std::vector<int> origVector(myVector.begin(), myVector.end());
 
 	printParams("position[1]", myVector[1], origVector[1]);
 
@@ -56,6 +58,7 @@ int main()
 		while (itMine != myVector.rend() && itOrig != origVector.rend())
 			printParamsIterator(*(itMine++), *(itOrig++));
 	}
+	std::cout << std::endl; 
 
 	printParams("position[3]", myVector[3], origVector[3]);
 	
@@ -79,12 +82,12 @@ int main()
 
 	printParams(".back()", myVector.back(), origVector.back());
 
-	std::cout << "\npoping back..." << std::endl;
+	std::cout << "poping back..." << std::endl;
 	myVector.pop_back();	origVector.pop_back();
 
 	printParams(".back()", myVector.back(), origVector.back());
 
-	std::cout << "\npushing back..." << std::endl;
+	std::cout << "pushing back..." << std::endl;
 	std::cout << "push_back(42)" << std::endl;
 	std::cout << "push_back(240)" << std::endl;
 	myVector.push_back(42);		origVector.push_back(42);
@@ -108,7 +111,7 @@ int main()
 			printParamsIterator(*(itMine++), *(itOrig++));
 	}
 
-	std::cout << "\n const iterators!!" << std::endl;
+	std::cout << "\nconst iterators!!" << std::endl;
 	{
 		indexPrint = 0;
 		ft::vector<int>::const_iterator itMine = myVector.begin();
@@ -127,6 +130,8 @@ int main()
 		while (itMine != myVector.rend() && itOrig != origVector.rend())
 			printParamsIterator(*(itMine++), *(itOrig++));
 	}
+
+	std::cout <<  std::endl;
 
 	printParams(".back()", myVector.back(), origVector.back());
 
