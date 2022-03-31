@@ -26,16 +26,20 @@ void printParamsIterator(T mine, U orig) {
 }
 
 
-
 int main()
 {
 	std::cout << "\n===== CONSTRUCTORS =====" << std::endl;
-	ft::vector<int> myVector(5u, 100);
-	std::vector<int> origVector(myVector.begin(), myVector.end());
-
-	origVector.reserve(42);
+	ft::vector<int> myVector_3(5u, 100);
+	ft::vector<int> myVector_2 = myVector_3;
+	ft::vector<int> myVector(myVector_2);
+	std::vector<int> origVector(myVector_3.begin(), myVector_3.end());
+	std::cout << std::endl;
 
 	printParams("position[1]", myVector[1], origVector[1]);
+
+	std::cout << "\n** reserving 42 ** " << std::endl;
+	myVector.reserve(42);
+	origVector.reserve(42);
 
 	std::cout << "\n** populating ** " << std::endl;
 	std::cout << "[2] = 2121" << std::endl;
@@ -111,6 +115,16 @@ int main()
 		std::vector<int>::reverse_iterator itOrig = origVector.rbegin();
 		while (itMine != myVector.rend() && itOrig != origVector.rend())
 			printParamsIterator(*(itMine++), *(itOrig++));
+	}
+
+	std::cout << "\nerasing begin() + 3..." << std::endl;
+	{
+		ft::vector<int>::iterator itMine = myVector.begin();
+		std::vector<int>::iterator itOrig = origVector.begin();
+		myVector.erase(itMine + 3);
+		origVector.erase(itOrig + 3);
+			
+		printParamsIterator(*(itMine), *(itOrig));
 	}
 
 	std::cout << "\nconst iterators!!" << std::endl;
