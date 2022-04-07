@@ -1,13 +1,16 @@
 #include <iomanip>
 #include <iostream>
 #include <vector>
+#include <stack>
+#include <map>
 #include "vector.hpp"
+#include "stack.hpp"
+#include "map.hpp"
 
 int indexPrint = 0;
 
 template <typename T, typename U>
 void printParams(std::string msg, T mine, U orig) {
-
 	std::cout << (mine == orig ? "\e[0;32m[OK" : "\e[0;31m[NOK") << "]\e[0m ";
 	std::cout << msg << ":\t";
 	std::cout << "\e[1;32m" << mine << "\e[0m | ";
@@ -25,11 +28,70 @@ void printParamsIterator(T mine, U orig) {
 	std::cout << std::endl;
 }
 
+template <typename ArrayMine, typename ArrayOrig>
+void test(ArrayMine mine, ArrayOrig orig) {
+
+	printParams("position[1]", mine[1], orig[1]);
+
+	std::cout << "\n** reserving 30 ** " << std::endl;
+	mine.reserve(42);
+	orig.reserve(42);
+
+	std::cout << "\n** populating ** " << std::endl;
+	std::cout << "[2] = 2121" << std::endl;
+	std::cout << "[3] = 21" << std::endl;
+	mine[2] = 2121;	orig[2] = 2121;
+	mine[3] = 21;	orig[3] = 21;;
+
+	printParams(".back()", mine.back(), orig.back());
+
+	printParams(".size()", mine.size(), orig.size());
+
+	std::cout << "\nclearing..." << std::endl;
+	mine.clear();	orig.clear();
+
+	printParams(".size()", mine.size(), orig.size());
+
+	printParams(".capacity()", mine.capacity(), orig.capacity());
+
+	printParams(".max_size()", mine.max_size(), orig.max_size());
+}
+
 
 int main()
 {
+	// ft::stack<int> stack;
+	std::map<std::string, int> map;
+    // stack.push(21);
+    // stack.push(22);
+    // stack.push(24);
+    // stack.push(25);
+     
+    // stack.pop();
+    // stack.pop();
+ 
+    // while (!stack.empty()) {
+    //    	std::cout << stack.top() << std::endl;
+    //     stack.pop();
+    // }
+
+	ft::vector<int> testMine(8u, 100);
+	std::vector<int> testOrig(testMine.begin(), testMine.end());
+	test(testMine, testOrig);
+
+	std::cout << "\niterators!!" << std::endl;
+	{
+		ft::vector<int>::iterator itMine = testMine.begin();
+		std::vector<int>::iterator itOrig = testOrig.begin();
+		indexPrint = 0;
+		while (itMine != testMine.end() && itOrig != testOrig.end())
+			printParamsIterator(*(itMine++), *(itOrig++));
+	}
+
+	return (0);
+
 	std::cout << "\n===== CONSTRUCTORS =====" << std::endl;
-	ft::vector<int> myVector_3(5u, 100);
+	ft::vector<int> myVector_3(8u, 100);
 	ft::vector<int> myVector_2 = myVector_3;
 	ft::vector<int> myVector(myVector_2);
 	std::vector<int> origVector(myVector_3.begin(), myVector_3.end());
@@ -37,7 +99,7 @@ int main()
 
 	printParams("position[1]", myVector[1], origVector[1]);
 
-	std::cout << "\n** reserving 42 ** " << std::endl;
+	std::cout << "\n** reserving 30 ** " << std::endl;
 	myVector.reserve(42);
 	origVector.reserve(42);
 
@@ -66,6 +128,11 @@ int main()
 	}
 	std::cout << std::endl; 
 
+	
+	std::cout << "\n** resize (14) ** " << std::endl;
+	myVector.resize(99, 1);
+	origVector.resize(99, 1);
+
 	printParams("position[3]", myVector[3], origVector[3]);
 	
 	printParams(".front()", myVector.front(), origVector.front());
@@ -75,6 +142,11 @@ int main()
 	printParams(".at(2)", myVector.at(2), origVector.at(2));
 
 	printParams(".size()", myVector.size(), origVector.size());
+
+	std::cout << "\n** assigning (12, 42) ** " << std::endl;
+	myVector.assign((std::size_t)12, 42);
+	origVector.assign(12, 42);
+
 
 	printParams(".data()", myVector.data(), origVector.data());
 
@@ -108,6 +180,20 @@ int main()
 			printParamsIterator(*(itMine++), *(itOrig++));
 	}
 
+	std::cout << "\nerasing begin() & end()" << std::endl;
+	{
+		indexPrint = 0;
+		ft::vector<int>::iterator retMine;
+		std::vector<int>::iterator retOrig;
+		retMine = myVector.erase(myVector.begin());
+		retOrig = origVector.erase(origVector.begin());
+		printParamsIterator(*(retMine), *(retOrig));
+		retMine = myVector.erase(myVector.begin());
+		retOrig = origVector.erase(origVector.begin());
+		printParamsIterator(*(retMine), *(retOrig));
+
+	}
+
 	std::cout << "\nreverse iterators!!" << std::endl;
 	{
 		indexPrint = 0;
@@ -117,14 +203,14 @@ int main()
 			printParamsIterator(*(itMine++), *(itOrig++));
 	}
 
-	std::cout << "\nerasing begin() + 3..." << std::endl;
+	std::cout << "\nerasing (begin(), begin() += 2)..." << std::endl;
 	{
-		ft::vector<int>::iterator itMine = myVector.begin();
-		std::vector<int>::iterator itOrig = origVector.begin();
-		myVector.erase(itMine + 3);
-		origVector.erase(itOrig + 3);
-			
-		printParamsIterator(*(itMine), *(itOrig));
+		indexPrint = 0;
+		ft::vector<int>::iterator retMine;
+		std::vector<int>::iterator retOrig;
+		retMine = myVector.erase(myVector.begin(),  myVector.begin() += 2);
+		retOrig = origVector.erase(origVector.begin(), origVector.begin() += 2);
+		printParamsIterator(*(retMine), *(retOrig));
 	}
 
 	std::cout << "\nconst iterators!!" << std::endl;
@@ -161,6 +247,21 @@ int main()
 	printParams(".capacity()", myVector.capacity(), origVector.capacity());
 
 	printParams(".max_size()", myVector.max_size(), origVector.max_size());
+
+	std::cout << "\nSwap between ft::vector's!!" << std::endl;
+	{
+		ft::vector<int> myVector_1(8u, 100);
+		ft::vector<int> myVector_2(4u, 42);
+		myVector_1.swap(myVector_2);
+		ft::vector<int>::iterator iter_1 = myVector_1.begin();
+		ft::vector<int>::iterator iter_2 = myVector_2.begin();
+		indexPrint = 0;
+		while (iter_1 != myVector_1.end())
+			printParamsIterator(*(iter_1), *(iter_1++));
+		indexPrint = 0;
+		while (iter_2 != myVector_2.end())
+			printParamsIterator(*(iter_2), *(iter_2++));
+	}
 
 	std::cout << std::endl;
 
