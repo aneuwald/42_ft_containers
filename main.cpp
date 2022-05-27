@@ -9,6 +9,7 @@
 
 int indexPrint = 0;
  // gay
+ // demais
 
 template <typename T, typename U>
 void printParams(std::string msg, T mine, U orig) {
